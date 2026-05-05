@@ -19,6 +19,7 @@ client.on('messageCreate', async (message) => {
 
   const userId = message.author.id;
 
+  // SET AFK
   if (message.content.startsWith('kafk')) {
     const reason = message.content.slice(5).trim() || 'No reason';
 
@@ -34,6 +35,7 @@ client.on('messageCreate', async (message) => {
     return message.reply(`Kamu sekarang AFK: ${reason}`);
   }
 
+  // BALIK DARI AFK
   if (afkUsers.has(userId)) {
     afkUsers.delete(userId);
 
@@ -45,6 +47,7 @@ client.on('messageCreate', async (message) => {
     message.reply('Welcome back, AFK dihapus!');
   }
 
+  // CEK MENTION
   message.mentions.users.forEach(user => {
     if (afkUsers.has(user.id)) {
       const data = afkUsers.get(user.id);
@@ -56,4 +59,9 @@ client.on('messageCreate', async (message) => {
       let waktu = `${minutes} menit`;
       if (hours > 0) waktu = `${hours} jam`;
 
-      message.reply(`${user.username} sedang AFK ${waktu} lalu
+      message.reply(`${user.username} sedang AFK ${waktu} lalu. Alasan: ${data.reason}`);
+    }
+  });
+});
+
+client.login(process.env.TOKEN);
